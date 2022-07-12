@@ -95,11 +95,11 @@ def main(args):
             imgs, _ = next(iter(train_loader))
             imgs = imgs.to(device)
 
-            noises = get_random_batch(batch_size, g_in_features, device)
+            random_data = get_random_batch(batch_size, g_in_features, device)
 
             # get outputs
             p_data = discriminator(imgs)
-            generated_imgs = generator(noises)
+            generated_imgs = generator(random_data)
             p_noise = discriminator(generated_imgs)
 
             # calculate loss of discriminator
@@ -111,11 +111,11 @@ def main(args):
         d_loss = torch.mean(d_loss_temp)
 
         generator.zero_grad()
-        batch_sample = next(iter(train_loader))
-        noises = batch_sample['noise'].to(device)
+
+        random_data = get_random_batch(batch_size, g_in_features, device)
 
         # get outputs
-        generated_imgs = generator(noises)
+        generated_imgs = generator(random_data)
         prob = discriminator(generated_imgs)
 
         # calculate loss of generator
