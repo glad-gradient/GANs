@@ -51,6 +51,7 @@ def main(args):
     batch_size = args.batch_size
     lr = args.lr
     k = args.k
+    n_layers = args.n_layers
     g_in_features = args.in_features
     g_out_features = 28*28
     d_in_features = 28*28
@@ -72,8 +73,8 @@ def main(args):
     dataset1 = datasets.MNIST('../data', train=True, download=True, transform=transform)
     train_loader = torch.utils.data.DataLoader(dataset1, **train_kwargs)
 
-    generator = Generator(g_in_features, g_out_features)
-    discriminator = Discriminator(d_in_features, d_out_features)
+    generator = Generator(g_in_features, g_out_features, n_layers)
+    discriminator = Discriminator(d_in_features, d_out_features, n_layers)
 
     g_optimizer = torch.optim.Adam(
         generator.parameters(),
@@ -133,6 +134,7 @@ if __name__ == '__main__':
     parser.add_argument('--momentum', type=float, default=0.9, help='SGD momentum')
     parser.add_argument('--weight_decay', type=float, default=0., help='SGD weight decay')
 
+    parser.add_argument('--n_layers', type=int, default=3, help='number of layers')
     parser.add_argument('--in_features', type=int, default=64, help='number of input features of generator')
     parser.add_argument('--k', type=int, default=1, help='number of steps to apply to the discriminator')
     parser.add_argument('--batch_size', type=int, default=64, help='batch size')
